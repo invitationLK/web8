@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>With Gratitude | Kaushi & Devon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --charcoal: #1A1A1A;
+            --ivory: #F4EFE6;
+            --gold: #C5A059;
+            --rose: #A0918E;
+            --dark-overlay: rgba(26, 26, 26, 0.75);
+            /* New Glassmorphism colors for borders */
+            --glass-bg: rgba(244, 239, 230, 0.05);
+            --glass-border: rgba(197, 160, 89, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--charcoal);
+            color: var(--ivory);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Background Particles --- */
+        #star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translateY(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(var(--dark-overlay), var(--dark-overlay)), 
+                        url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=2000') no-repeat center center fixed;
+            background-size: cover;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            color: var(--gold);
+            letter-spacing: 12px;
+            text-align: center;
+            font-weight: 300;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* --- Content Sections --- */
+        section {
+            position: relative;
+            padding: 100px 10%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            z-index: 2;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+        }
+
+        .gratitude-text {
+            font-size: 1.2rem;
+            font-weight: 200;
+            color: var(--ivory);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- Photo Collage (UPDATED STYLING) --- */
+        .collage {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding: 50px 0;
+        }
+
+        .photo-frame {
+            /* Glassmorphism/Fade Border */
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); /* Safari support */
+            padding: 12px;
+            border: 1px solid var(--glass-border);
+            
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                        border-color 0.6s ease,
+                        box-shadow 0.6s ease;
+            cursor: pointer;
+            border-radius: 4px; /* Subtle curve */
+        }
+
+        .photo-frame img {
+            width: 260px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 2px;
+            
+            /* Updated image filters for dark theme fade */
+            filter: sepia(10%) contrast(1.05) brightness(0.9);
+            transition: filter 0.6s ease;
+            
+            /* Vignette effect overlay to match dark theme */
+            mask-image: radial-gradient(circle, black 60%, rgba(0,0,0,0.7) 100%);
+            -webkit-mask-image: radial-gradient(circle, black 60%, rgba(0,0,0,0.7) 100%);
+        }
+
+        /* Scattered rotation */
+        .photo-frame:nth-child(1) { transform: rotate(-3deg); }
+        .photo-frame:nth-child(2) { transform: rotate(2deg); transform: translateY(-10px); }
+        .photo-frame:nth-child(3) { transform: rotate(-1deg); transform: translateY(10px); }
+        .photo-frame:nth-child(4) { transform: rotate(3deg); }
+        
+        /* Hover Effects - Smoothing and glowing */
+        .photo-frame:hover {
+            transform: scale(1.08) rotate(0deg) translateY(0);
+            z-index: 10;
+            border-color: rgba(197, 160, 89, 0.6); /* Gold border gets stronger */
+            box-shadow: 0 15px 40px rgba(197, 160, 89, 0.2); /* Soft gold glow */
+        }
+
+        .photo-frame:hover img {
+            filter: sepia(0%) contrast(1.1) brightness(1.1); /* "Wakes up" on hover */
+        }
+
+        /* --- Guestbook --- */
+        .guestbook-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 12px;
+            margin-top: 50px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(26, 26, 26, 0.5);
+            border: 1px solid var(--rose);
+            color: var(--ivory);
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 8px rgba(197, 160, 89, 0.3);
+        }
+
+        button {
+            background: var(--gold);
+            color: var(--charcoal);
+            padding: 15px 50px;
+            border: none;
+            font-weight: 600;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            box-shadow: 0 0 25px var(--gold);
+            transform: translateY(-3px);
+            background: #d4b474;
+        }
+
+        .wish-wall {
+            margin-top: 50px;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        /* Custom Scrollbar for the Wish Wall */
+        .wish-wall::-webkit-scrollbar { width: 6px; }
+        .wish-wall::-webkit-scrollbar-track { background: transparent; }
+        .wish-wall::-webkit-scrollbar-thumb { background: rgba(160, 145, 142, 0.3); border-radius: 3px; }
+
+        .wish-entry {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(244, 239, 230, 0.03);
+            border-left: 3px solid var(--gold);
+            animation: fadeIn 0.5s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .wish-name { color: var(--gold); font-weight: 600; display: block; margin-bottom: 5px; }
+
+        footer {
+            padding: 80px 20px;
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--rose);
+            font-size: 1.6rem;
+            border-top: 1px solid rgba(197, 160, 89, 0.1);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="star-container"></div>
+
+    <section class="hero">
+        <h1 class="reveal">THANK YOU!</h1>
+    </section>
+
+    <section id="gratitude">
+        <h2 class="reveal">Our Deepest Gratitude</h2>
+        <p class="reveal gratitude-text">
+            To our family and friends: your presence at our wedding made the start of our new life together truly magical. 
+            The laughter, the joy, and the shared memories are treasures we will carry forever.
+        </p>
+    </section>
+
+    <section id="memories">
+        <h2 class="reveal">The Memories</h2>
+        <div class="collage reveal">
+            <div class="photo-frame"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=500" alt="Wedding 1"></div>
+            <div class="photo-frame"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=500" alt="Wedding 2"></div>
+            <div class="photo-frame"><img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=500" alt="Wedding 3"></div>
+            <div class="photo-frame"><img src="https://images.unsplash.com/photo-1510076857177-7470076d4098?auto=format&fit=crop&q=80&w=500" alt="Wedding 4"></div>
+        </div>
+    </section>
+
+    <section id="guestbook">
+        <h2 class="reveal">Add Your Wish</h2>
+        <div class="guestbook-container reveal">
+            <input type="text" id="guestName" placeholder="Your Name">
+            <textarea id="guestWish" rows="4" placeholder="Your message to the newlyweds..."></textarea>
+            <button onclick="addWish()">ADD A WISH</button>
+            <div class="wish-wall" id="wishWall">
+                </div>
+        </div>
+    </section>
+
+    <footer>
+        With Love, Kaushi & Devon<br>
+        <span style="font-size: 1rem; letter-spacing: 4px; margin-top: 15px; display: block; color: var(--gold);">OCTOBER 14, 2026</span>
+    </footer>
+
+    <script>
+        // --- 1. Starry Night Effect ---
+        const starContainer = document.getElementById('star-container');
+        const starCount = window.innerWidth < 768 ? 30 : 65; // Fewer stars on mobile for performance
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDuration = Math.random() * 4 + 2 + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starContainer.appendChild(star);
+        }
+
+        // --- 2. Scroll Reveal Logic ---
+        const observerOptions = { threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Once revealed, we can stop observing this element
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- 3. Guestbook Interaction ---
+        function addWish() {
+            const name = document.getElementById('guestName').value;
+            const wish = document.getElementById('guestWish').value;
+            const wall = document.getElementById('wishWall');
+
+            if (name.trim() && wish.trim()) {
+                const entry = document.createElement('div');
+                entry.className = 'wish-entry';
+                entry.innerHTML = `<span class="wish-name">${sanitize(name)}</span> <span>${sanitize(wish)}</span>`;
+                wall.prepend(entry);
+
+                // Luxury Champagne Confetti
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.7 },
+                    colors: ['#C5A059', '#F4EFE6', '#A0918E', '#FFFFFF']
+                });
+
+                // Clear Inputs
+                document.getElementById('guestName').value = '';
+                document.getElementById('guestWish').value = '';
+            } else {
+                alert("Please share your name and a wish with us!");
+            }
+        }
+
+        // Simple function to escape HTML and prevent basic XSS
+        function sanitize(str) {
+            const temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+    </script>
+</body>
+</html>
